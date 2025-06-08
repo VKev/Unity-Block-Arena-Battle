@@ -10,13 +10,15 @@ public class GameCountdownUI : MonoBehaviour
     private void Update()
     {
         if (NetworkCountdownManager.Instance == null) return;
-
         float timeLeft = NetworkCountdownManager.Instance.GetTimeRemaining();
 
         if (timeLeft <= 0)
         {
             if (panel.activeSelf)
+            {
+                Debug.Log("[GameCountdownUI] Countdown finished, hiding panel.");
                 panel.SetActive(false);
+            }
             return;
         }
 
@@ -28,7 +30,8 @@ public class GameCountdownUI : MonoBehaviour
     }
     
     private void Awake()
-    {
+    {   
+        panel.SetActive(true);
         if (panel == null)
             Debug.LogWarning("[GameCountdownUI] Panel is not assigned!");
         if (countdownText == null)

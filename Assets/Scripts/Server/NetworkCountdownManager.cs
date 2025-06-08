@@ -6,7 +6,7 @@ public class NetworkCountdownManager : NetworkBehaviour
     public static NetworkCountdownManager Instance;
 
     [SerializeField] private GameCountdownUI countdownUI;
-    private NetworkVariable<float> serverCountdownTime = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<float> serverCountdownTime = new(30, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     private bool countdownRunning;
 
@@ -17,6 +17,7 @@ public class NetworkCountdownManager : NetworkBehaviour
 
     private void Update()
     {
+
         if (!IsServer || !countdownRunning) return;
 
         serverCountdownTime.Value -= Time.deltaTime;
@@ -29,10 +30,9 @@ public class NetworkCountdownManager : NetworkBehaviour
         }
     }
 
-    public void StartCountdown(float time)
+    public void StartCountdown(float time, bool isServer)
     {
-        if (!IsServer) return;
-
+        if (!isServer) return;
         serverCountdownTime.Value = time;
         countdownRunning = true;
     }

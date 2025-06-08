@@ -1,62 +1,63 @@
-﻿    using System.Collections.Generic;
-    using UnityEngine;
-    using Unity.Netcode;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using Unity.Netcode;
 
-    public class PlayerHealthUIManager : NetworkBehaviour
+public class PlayerHealthUIManager : NetworkBehaviour
+{
+    public static PlayerHealthUIManager Instance;
+
+    [SerializeField] private Transform healthBarListRoot;
+    [SerializeField] private GameObject healthBarPrefab;
+    [SerializeField] private GameCountdownUI countdownUI;
+
+    private Dictionary<ulong, HealthBarUI> healthBars = new();
+
+    private void Awake()
     {
-        public static PlayerHealthUIManager Instance;
+        Instance = this;
+    }
 
-        [SerializeField] private Transform healthBarListRoot;
-        [SerializeField] private GameObject healthBarPrefab;
-        [SerializeField] private GameCountdownUI countdownUI;
-        
-        private Dictionary<ulong, HealthBarUI> healthBars = new();
-
-        private void Awake()
+    public override void OnNetworkSpawn()
+    {
+        Debug.Log("[PlayerHealthUIManager] OnNetworkSpawn called");
+        if (IsServer)
         {
-            Instance = this;
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         }
 
-        public override void OnNetworkSpawn()
+        NetworkCountdownManager.Instance.StartCountdown(30f, IsServer);
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        foreach (var player in NetworkManager.Singleton.ConnectedClientsList)
         {
-            if (IsServer)
+            AddHealthBarClientRpc(player.ClientId, new ClientRpcParams
             {
-                NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-            }
-            
-            NetworkCountdownManager.Instance.StartCountdown(30f);
+                Send = new ClientRpcSendParams { TargetClientIds = new[] { clientId } }
+            });
         }
 
-        private void OnClientConnected(ulong clientId)
-        {
-            foreach (var player in NetworkManager.Singleton.ConnectedClientsList)
-            {
-                AddHealthBarClientRpc(player.ClientId, new ClientRpcParams
-                {
-                    Send = new ClientRpcSendParams { TargetClientIds = new[] { clientId } }
-                });
-            }
+        AddHealthBarClientRpc(clientId);
+    }
 
-            AddHealthBarClientRpc(clientId);
-        }
-
-        [ClientRpc]
-        private void AddHealthBarClientRpc(ulong clientId, ClientRpcParams rpcParams = default)
+    [ClientRpc]
+    private void AddHealthBarClientRpc(ulong clientId, ClientRpcParams rpcParams = default)
+    {
+        if (!healthBars.ContainsKey(clientId))
         {
-            if (!healthBars.ContainsKey(clientId))
-            {
-                var barGO = Instantiate(healthBarPrefab, healthBarListRoot);
-                var bar = barGO.GetComponent<HealthBarUI>();
-                healthBars[clientId] = bar;
-                bar.SetFill(1f);
-            }
-        }
-
-        public void UpdateHealth(ulong clientId, float percent)
-        {
-            if (healthBars.TryGetValue(clientId, out var bar))
-            {
-                bar.SetFill(percent);
-            }
+            var barGO = Instantiate(healthBarPrefab, healthBarListRoot);
+            var bar = barGO.GetComponent<HealthBarUI>();
+            healthBars[clientId] = bar;
+            bar.SetFill(1f);
         }
     }
+
+    public void UpdateHealth(ulong clientId, float percent)
+    {
+        if (healthBars.TryGetValue(clientId, out var bar))
+        {
+            bar.SetFill(percent);
+        }
+    }
+}
