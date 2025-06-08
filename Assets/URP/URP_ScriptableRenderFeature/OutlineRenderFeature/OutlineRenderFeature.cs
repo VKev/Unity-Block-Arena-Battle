@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,28 +9,29 @@ using UnityEngine.XR;
 
 public class OutlineRenderFeature : ScriptableRendererFeature
 {
-
-
     OutlineBlitPass outlineRenderPass = null;
     DrawDepthPass drawOpaquesDepthPass = null;
+
     DrawObstructPass drawOpaquesObstructPass = null;
+
     //MyCopyDepth copyDepthPass = null;
     [SerializeField] private RenderPassEvent renderPassEvent;
     [SerializeField] private LayerMask outlineLayerMask;
     [SerializeField] private LayerMask obstructLayerMask;
     [SerializeField] public Material outlineMat;
+
     /// <inheritdoc/>
     public override void Create()
     {
-        if (outlineMat==null)
+        if (outlineMat == null)
             outlineMat = new Material(Shader.Find("MyCustom_URP_Shader/URP_OutlinePP"));
 
-         
+
         drawOpaquesDepthPass = new DrawDepthPass(outlineLayerMask);
         drawOpaquesObstructPass = new DrawObstructPass(obstructLayerMask);
         outlineRenderPass = new OutlineBlitPass(renderPassEvent, outlineMat);
-
     }
+
     public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
     {
         if (renderingData.cameraData.camera == Camera.main)
@@ -47,11 +47,9 @@ public class OutlineRenderFeature : ScriptableRendererFeature
         if (renderingData.cameraData.camera == Camera.main)
         {
             renderer.EnqueuePass(drawOpaquesDepthPass);
-            if(outlineMat != null && outlineMat.GetFloat("_SeeThroughWall") == 0)
+            if (outlineMat != null && outlineMat.GetFloat("_SeeThroughWall") == 0)
                 renderer.EnqueuePass(drawOpaquesObstructPass);
             renderer.EnqueuePass(outlineRenderPass);
         }
     }
 }
-
-
