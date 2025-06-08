@@ -5,8 +5,7 @@ using buffSystem;
 
 public class SafeRoundManager : MonoBehaviour
 {
-    // REMOVE THIS LINE: [SerializeField] private BuffSelectionUI buffSelectionUI;
-    // The manager no longer directly controls the UI, it publishes an event.
+  
 
     private void Awake()
     {
@@ -23,12 +22,7 @@ public class SafeRoundManager : MonoBehaviour
 
     public void RequestBuffSelection()
     {
-        // REMOVE THIS BLOCK: No need to check buffSelectionUI reference
-        // if (buffSelectionUI == null)
-        // {
-        //     Debug.LogError("GameManager: Cannot request buff selection, BuffSelectionUI reference is missing.");
-        //     return;
-        // }
+        
 
         Debug.Log("GameManager: Preparing buffs for selection...");
 
