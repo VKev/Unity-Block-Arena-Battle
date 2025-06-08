@@ -158,7 +158,7 @@ MonoBehaviour:
     groundLayers:
       serializedVersion: 2
       m_Bits: 64
-    maxFloatingHeight: 1
+    maxFloatingHeight: 2
   groundedState:
     stateManager: {fileID: 0}
     moveSpeed: 500

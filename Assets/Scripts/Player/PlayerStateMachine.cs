@@ -59,6 +59,7 @@ namespace PlayerStateMachine
 
         public void Start()
         {
+            
             // showGizmos = true;
 
             // States[EState.Root] = rootState;

@@ -55,7 +55,7 @@ public class BaseState<EState> where EState : Enum
             ExitState();
             newState.EnterAllSuperStates();
             newState.EnterState();
-            
+
             newState.EnterAllSubStates();
 
             stateManager.CurrentState = newState;
@@ -66,6 +66,45 @@ public class BaseState<EState> where EState : Enum
             Debug.LogWarning($"Hierarchical State Machine: Transition from {this.StateKey} state to {newStateKey} state, wrong level");
         }
     }
+
+    public void TransitionToStateWithNoSubstate(EState newStateKey)
+    {
+        BaseState<EState> newState = stateManager.States[newStateKey];
+        if (newState.level == level)
+        {
+            if (hasFather)
+            {
+                if (!newState.hasFather || (newState.hasFather && newState.CurrentSuperState == CurrentSuperState))
+                {
+                    newState.SetSuperState(CurrentSuperState.StateKey);
+                }
+                else if (newState.hasFather && newState.CurrentSuperState != CurrentSuperState)
+                {
+                    ExitAllSuperStates();
+                }
+            }
+            if (hasChild)
+            {
+                if (newState.hasChild && newState.CurrentSubState != CurrentSubState)
+                {
+                    ExitAllSubStates();
+                }
+            }
+            ExitState();
+            newState.EnterAllSuperStates();
+            newState.EnterState();
+
+            newState.EnterAllSubStates();
+
+            stateManager.CurrentState = newState;
+
+        }
+        else
+        {
+            Debug.LogWarning($"Hierarchical State Machine: Transition from {this.StateKey} state to {newStateKey} state, wrong level");
+        }
+    }
+
     public void SetSuperState(EState newStateKey)
     {
         BaseState<EState> newState = stateManager.States[newStateKey];
@@ -74,7 +113,7 @@ public class BaseState<EState> where EState : Enum
             CurrentSuperState = newState;
             if (CurrentSuperState.CurrentSubState != this)
                 CurrentSuperState.SetSubState(StateKey);
-            
+
         }
         else
         {
@@ -163,7 +202,7 @@ public class BaseState<EState> where EState : Enum
     }
     public void EnterAllSubStates()
     {
-        
+
         if (CurrentSubState != null)
         {
             CurrentSubState.EnterState();
