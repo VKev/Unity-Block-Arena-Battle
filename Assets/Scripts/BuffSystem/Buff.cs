@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
-using playerStat; // Make sure this namespace is correctly referenced
-
-namespace buffSystem // This is the namespace for your buff system classes
+using playerStat;
+namespace buffSystem 
 {
     // Enum to define the different tiers of buffs
     public enum BuffTier

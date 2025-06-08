@@ -15,13 +15,11 @@ public class SpawItem : MonoBehaviour
     [Tooltip("Time between each individual item spawn. Set to 0 for instant bulk spawn of all maxItems.")]
     public float spawnInterval = 0f;
 
-    // --- ADJUSTED SPAWN AREA PARAMETERS ---
-    // Using the provided item position (8.41, 2.495, 0.58) as a central reference.
-    public Vector3 centerSpawnPoint = new Vector3(8.41f, 2.495f, 0.58f); // This is the new center
+    // ---  SPAWN AREA PARAMETERS ---
+    public Vector3 centerSpawnPoint = new Vector3(8.41f, 2.495f, 0.58f); //  center
 
     [Tooltip("How far out from the Center Spawn Point items can spawn on the X and Z axes.")]
-    public float spawnRadiusXZ = 10f; // Reduced from 20 to 15 to try and keep it within the map.
-
+    public float spawnRadiusXZ = 10f;
     [Tooltip("The minimum Y offset from the Center Spawn Point's Y for spawning.")]
     public float spawnOffsetYMin = 0.1f; // Spawn very slightly above the center Y to ensure it's above ground.
 
@@ -29,8 +27,7 @@ public class SpawItem : MonoBehaviour
     public float spawnOffsetYMax = 2f; // Allow for some vertical variation above the ground.
 
 
-    // These values will be calculated dynamically based on the above settings
-    // and displayed in the Inspector (though not directly editable here in code once Unity loads it).
+    
     public Vector3 spawnAreaMin; // Minimum X,Y,Z for spawning
     public Vector3 spawnAreaMax;   // Maximum X,Y,Z for spawning
 
@@ -73,7 +70,7 @@ public class SpawItem : MonoBehaviour
 
     void OnEnable()
     {
-        // Ensure GameEvents is properly defined elsewhere (as we discussed in previous interactions)
+        // Ensure GameEvents is properly defined elsewhere 
         // e.g., public static class GameEvents { public static event Action OnItemsSpawnRequested; }
         GameEvents.OnItemsSpawnRequested += TriggerSpawnItems;
         Debug.Log("SpawItem: Subscribed to OnItemsSpawnRequested event.", this);
@@ -112,7 +109,6 @@ public class SpawItem : MonoBehaviour
         }
 
         // Reset current count if you want to always spawn 'maxItems' from scratch each time this is called.
-        // If you want to add to existing items until 'maxItems' is reached, comment this out.
         currentItemCount = 0;
 
         if (spawnInterval <= 0f) // If interval is 0 or negative, spawn all instantly in one frame
@@ -137,21 +133,19 @@ public class SpawItem : MonoBehaviour
     {
         for (int i = 0; i < maxItems; i++)
         {
-            // Only spawn if we haven't hit the max (useful if items are destroyed by player during spawning process)
             if (currentItemCount < maxItems)
             {
                 SpawnSingleItemInstance();
             }
             else
             {
-                // If max items are already in scene, stop spawning this batch
                 Debug.Log("SpawItem: Max items reached during interval spawning. Stopping routine.", this);
                 yield break; // Exit the coroutine
             }
             yield return new WaitForSeconds(spawnInterval); // Wait for the specified interval
         }
         Debug.Log("SpawItem: Finished spawning all items via interval routine.", this);
-        currentSpawnRoutine = null; // Clear reference when routine finishes
+        currentSpawnRoutine = null;
     }
 
     /// <summary>

@@ -12,11 +12,10 @@ public class BuffSelectionUI : MonoBehaviour
     public GameObject buffPanel;
 
     [Header("Timer Panel")]
-    public GameObject timerPanel; // <--- NEW: Drag your PanelTimerLayout here in the Inspector
+    public GameObject timerPanel; 
     public TMP_Text countdownText;
 
     [Header("Buff Buttons (Set size = 3)")]
-    // You can set these manually in Inspector, or let Awake try to find them
     [field: SerializeField]
     public List<BuffButtonUI> buffButtons;
 
@@ -154,7 +153,6 @@ public class BuffSelectionUI : MonoBehaviour
         if (buffs.Count != buffButtons.Count) // Dynamic check for button count
         {
             Debug.LogError($"BuffSelectionUI: Mismatch! Expected {buffButtons.Count} buffs based on buttons, but received {buffs.Count}.", this);
-            // Optionally, try to show what you can or disable UI if counts don't match critical number (e.g., 3)
             if (buffs.Count == 0 || buffButtons.Count == 0)
             {
                 buffPanel.SetActive(false);
@@ -201,7 +199,6 @@ public class BuffSelectionUI : MonoBehaviour
             ui.button.gameObject.SetActive(true); // Ensure button is active
         }
 
-        // Deactivate any extra buttons if buffs.Count < buffButtons.Count
         for (int i = displayCount; i < buffButtons.Count; i++)
         {
             if (buffButtons[i] != null && buffButtons[i].button != null)
@@ -252,7 +249,7 @@ public class BuffSelectionUI : MonoBehaviour
         CloseUI();
     }
 
-    // Handler for the EventManager.OnBuffChosen event (optional, but good practice if you subscribe)
+    // Handler for the EventManager.OnBuffChosen event (optiona)
     private void OnBuffChosenHandler(object sender, BuffChosenEventArgs args)
     {
         // This handler means this specific UI element is also listening to the event it publishes.
@@ -283,7 +280,6 @@ public class BuffSelectionUI : MonoBehaviour
     }
 }
 
-// Ensure this class is also in your project, potentially in BuffButtonUI.cs or the same file.
 [System.Serializable]
 public class BuffButtonUI
 {

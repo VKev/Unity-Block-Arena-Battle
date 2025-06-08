@@ -36,8 +36,7 @@ public class ItemLife : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        // Ensure the spawner exists and is still active in the hierarchy before notifying it.
-        // This prevents errors if the spawner itself is being destroyed or the scene is unloading.
+      
         if (spawner != null && spawner.gameObject.activeInHierarchy)
         {
             spawner.ItemDestroyed();
