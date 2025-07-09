@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7911881390a967e40b5d552ac70ba49d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 272966
+  packageName: Low Poly Stylized Gun Demo
+  packageVersion: 2.0
+  assetPath: Assets/Low Poly Stylized Gun Demo/Low Poly Stylized Gun/URP/Material/AssetMaterial
+    URP.mat
+  uploadId: 694494

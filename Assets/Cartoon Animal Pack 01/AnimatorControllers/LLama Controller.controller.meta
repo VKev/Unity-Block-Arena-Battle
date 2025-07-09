@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 44b055c5171a039449bd9adf78e054cc
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 232022
+  packageName: Cartoon Animal Pack 01
+  packageVersion: 1.0
+  assetPath: Assets/Cartoon Animal Pack 01/AnimatorControllers/LLama Controller.controller
+  uploadId: 526818
